@@ -22,6 +22,7 @@ var callbacks = {
   registerWallet: function(event, reply) {
     var origin = event.origin;
 
+    loadWallets();
     if (getWallet(origin)) {
       console.log('Already registered', wallet.origin);
       return reply();
