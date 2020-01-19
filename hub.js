@@ -3,6 +3,10 @@ var wallets = [];
 
 var connectedFrame = null;
 
+if (window.parent == window) {
+  window.location.replace('https://demo.' + window.location.hostname);
+}
+
 function loadWallets() {
   wallets = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   return wallets;
