@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+body {
+  font-family: sans-serif;
+}
+.walletItem {
+  background: #FFFFFF;
+  border-bottom: solid 1px #DDDDDD;
+  padding: 4px 0;
+  list-style: none;
+}
+.walletItem:hover {
+  background: #EEEEEE;
+  border-bottom: solid 1px #DDDDDD;
+  cursor: pointer;
+  padding: 4px 0;
+  list-style: none;
+}
+.walletUrl {
+  color: #555555;
+}
+ul {
+  padding: 0;
+}
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+
+  <template id="list">
+    <ul>
+    </ul>
+  </template>
+  <template id="listItem">
+    <li class="walletItem">
+      <div></div>
+      <div class="walletUrl"></div>
+    </li>
+  </template>
+
+  <script>
+var STORAGE_KEY = 'burner-hub-wallets';
+
+function showList() {
+  var listClone = document.querySelector('#list').content.cloneNode(true);
+  var ul = listClone.querySelector('ul');
+
+  wallets = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+  wallets.forEach(function(wallet) {
+    var item = document.querySelector('#listItem').content.cloneNode(true);
+    item.addEventListener('click', function() {
+      document.parent.postMessage({ message: 'walletSelected', wallet: wallet }, '*');
+    });
+    var rows = item.querySelectorAll('div');
+    rows[0].textContent = wallet.name;
+    rows[1].textContent = wallet.origin;
+
+    ul.appendChild(item);
+  });
+
+  document.querySelector('#content').appendChild(listClone);
+}
+showList();
+  </script>
+</body>
+</html>
