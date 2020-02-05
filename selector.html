@@ -76,7 +76,7 @@ function showList() {
   wallets.forEach(function(wallet) {
     var item = document.querySelector('#listItem').content.cloneNode(true);
     item.addEventListener('click', function() {
-      document.parent.postMessage({ message: 'walletSelected', wallet: wallet }, '*');
+      window.parent.postMessage({ message: 'walletSelected', wallet: wallet }, '*');
     });
     var rows = item.querySelectorAll('div');
     rows[0].textContent = wallet.name;
@@ -86,7 +86,7 @@ function showList() {
   });
 
   content.appendChild(listClone);
-  document.parent.postMessage({ message: 'setHeight', height: document.body.clientHeight });
+  window.parent.postMessage({ message: 'setHeight', height: document.body.clientHeight });
 }
 
 testPermissions().then(function(hasPermission) {
