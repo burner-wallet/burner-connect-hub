@@ -52,7 +52,7 @@ function receiveMessage(event) {
       }, event.origin);
     }
     callbacks[event.data.command](event, reply);
-  } else {
+  } else if (event.data.command) {
     console.error('Unknown command', event.data.command);
   }
 }

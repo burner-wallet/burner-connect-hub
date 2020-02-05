@@ -56,6 +56,12 @@ var STORAGE_KEY = 'burner-hub-wallets';
 
 var content = document.querySelector('#content');
 
+var defaultWallets = [];
+var defaultRegex = /^#wallets=([\w\d%]+)$/;
+if (defaultRegex.test(location.hash)) {
+  defaultWallets = JSON.parse(decodeURIComponent(defaultRegex.exec(location.hash)[1]))
+}
+
 function testPermissions() {
   if (document.hasStorageAccess) {
     return document.hasStorageAccess();
@@ -75,7 +81,13 @@ function showList() {
 
   wallets = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
-  wallets.forEach(function(wallet) {
+  var addedOrigins = {};
+  wallets.concat(defaultWallets).forEach(function(wallet) {
+    if (addedOrigins[wallet.origin]) {
+      return;
+    }
+    addedOrigins[wallet.origin] = true;
+
     var item = document.querySelector('#listItem').content.cloneNode(true);
     item.querySelector('li').addEventListener('click', function() {
       window.parent.postMessage({ message: 'walletSelected', wallet: wallet }, '*');
@@ -92,14 +104,8 @@ function showList() {
 }
 
 testPermissions().then(function(hasPermission) {
-  if (hasPermission) {
+  if (hasPermission || defaultWallets.length > 0) {
     showList();
-  } else if(document.requestStorageAccess) {
-    var permission = document.querySelector('#permission').content.cloneNode(true);
-    permission.querySelector('button').addEventListener('click', function() {
-      document.requestStorageAccess().then(showList);
-    });
-    content.appendChild(permission);
   } else {
     content.innerHTML = 'Unfortionately, your browser does not support BurnerConnect';
   }
