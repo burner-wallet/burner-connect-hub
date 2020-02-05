@@ -63,15 +63,11 @@ if (defaultRegex.test(location.hash)) {
 }
 
 function testPermissions() {
-  if (document.hasStorageAccess) {
-    return document.hasStorageAccess();
-  } else {
-    try {
-      localStorage.setItem('test', 'test');
-      return Promise.resolve(true);
-    } catch (e) {
-      return Promise.resolve(false);
-    }
+  try {
+    localStorage.setItem('test', 'test');
+    return Promise.resolve(true);
+  } catch (e) {
+    return Promise.resolve(false);
   }
 }
 
