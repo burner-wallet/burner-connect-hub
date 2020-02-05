@@ -30,10 +30,18 @@ ul {
 <body>
   <div id="content"></div>
 
+  <template id="permission">
+    <div>
+      <div>BurnerConnect allows you to use your Burner Wallet accounts on other dapps</div>
+      <button>Connect</button>
+    </div>
+  </template>
+
   <template id="list">
     <ul>
     </ul>
   </template>
+
   <template id="listItem">
     <li class="walletItem">
       <div></div>
@@ -84,7 +92,11 @@ testPermissions().then(function(hasPermission) {
   if (hasPermission) {
     showList();
   } else if(document.requestStorageAccess) {
-    document.requestStorageAccess().then(showList);
+    var permission = document.querySelector('#permission').content.cloneNode(true);
+    permission.querySelector('button').addEventListener('click', function() {
+      document.requestStorageAccess().then(showList);
+    });
+    content.appendChild(listClone);
   } else {
     content.innerHTML = 'Unfortionately, your browser does not support BurnerConnect';
   }
