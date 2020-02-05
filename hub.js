@@ -51,7 +51,15 @@ function receiveMessage(event) {
         id: event.data.id
       }, event.origin);
     }
-    callbacks[event.data.command](event, reply);
+
+    try {
+      callbacks[event.data.command](event, reply);
+    } catch (e) {
+      event.source.postMessage({
+        error: e.message,
+        id: event.data.id
+      }, event.origin);
+    }
   } else if (event.data.command) {
     console.error('Unknown command', event.data.command);
   }
