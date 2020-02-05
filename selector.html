@@ -86,6 +86,7 @@ function showList() {
   });
 
   content.appendChild(listClone);
+  document.parent.postMessage({ message: 'setHeight', height: document.body.clientHeight });
 }
 
 testPermissions().then(function(hasPermission) {
