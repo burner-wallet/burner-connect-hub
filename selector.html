@@ -82,7 +82,8 @@ function showList() {
   wallets = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
   var addedOrigins = {};
-  wallets.concat(defaultWallets).forEach(function(wallet) {
+  var allWallets = wallets.concat(defaultWallets);
+  allWallets.forEach(function(wallet) {
     if (addedOrigins[wallet.origin]) {
       return;
     }
@@ -98,6 +99,12 @@ function showList() {
 
     ul.appendChild(item);
   });
+
+  if (allWallets.length === 0) {
+    var empty = document.createElement('li');
+    empty.innerText = 'No wallets found';
+    ul.appendChild(empty);
+  }
 
   content.appendChild(listClone);
   window.parent.postMessage({ message: 'setHeight', height: document.body.clientHeight }, '*');
