@@ -44,6 +44,21 @@ ul {
   <script>
 var STORAGE_KEY = 'burner-hub-wallets';
 
+var content = document.querySelector('#content');
+
+function testPermissions() {
+  if (document.hasStorageAccess) {
+    return document.hasStorageAccess();
+  } else {
+    try {
+      localStorage.setItem('test', 'test');
+      return Promise.resolve(true);
+    } catch (e) {
+      return Promise.resolve(false);
+    }
+  }
+}
+
 function showList() {
   var listClone = document.querySelector('#list').content.cloneNode(true);
   var ul = listClone.querySelector('ul');
@@ -62,9 +77,18 @@ function showList() {
     ul.appendChild(item);
   });
 
-  document.querySelector('#content').appendChild(listClone);
+  content.appendChild(listClone);
 }
-showList();
+
+testPermissions().then(function(hasPermission) {
+  if (hasPermission) {
+    showList();
+  } else if(document.requestStorageAccess) {
+    document.requestStorageAccess().then(showList);
+  } else {
+    content.innerHTML = 'Unfortionately, your browser does not support BurnerConnect';
+  }
+});
   </script>
 </body>
 </html>
