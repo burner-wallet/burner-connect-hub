@@ -57,7 +57,7 @@ var STORAGE_KEY = 'burner-hub-wallets';
 var content = document.querySelector('#content');
 
 var defaultWallets = [];
-var defaultRegex = /^#wallets=([\w\d%./]+)$/;
+var defaultRegex = /^#wallets=([\w\d%./\-]+)$/;
 if (defaultRegex.test(location.hash)) {
   defaultWallets = JSON.parse(decodeURIComponent(defaultRegex.exec(location.hash)[1]))
 }
